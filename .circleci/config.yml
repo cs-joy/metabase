@@ -11,31 +11,24 @@ executors:
     docker:
       # CircleCI base image
       - image: cimg/base:2021.03
-
+  
+  # CircleCI clojure base (Lein 2.9.5) + Clojure CLI
   clojure:
     working_directory: /home/circleci/metabase/metabase/
     docker:
-      - image: paoliniluis/test:metabase-ci-light
-
-  # we should build custom image for this
+      - image: metabase/ci:metabase-ci-light
+  
+  # CircleCI clojure base (Lein 2.9.5) + Node + Clojure CLI
   clojure-and-node:
     working_directory: /home/circleci/metabase/metabase/
     docker:
-      - image: paoliniluis/test:metabase-ci-node
+      - image: metabase/ci:metabase-ci-node
 
-  # clojure-and-node-and-browsers:
-  #   working_directory: /home/circleci/metabase/metabase/
-  #   docker:
-  #     - image: circleci/clojure:lein-2.9.5-node-browsers
-
-  # This is a special image that is based on clojure-and-node but includes extras like Clojure CLI
-  # tools. See https://github.com/metabase/metabase-docker-ci for more information. You shouldn't use this image
-  # unless you need the extra stuff -- because it's not an official Circle image, the extra layers won't get cached
-  # and it might take longer to spin this up.
+  # CircleCI base (Lein 2.9.5) + Node + Headless browsers + Clojure CLI
   clojure-and-node-and-browsers:
     working_directory: /home/circleci/metabase/metabase/
     docker:
-      - image: paoliniluis/test:metabase-ci-full
+      - image: metabase/ci:metabase-ci-full
 
   # Java 11 tests also test Metabase with the at-rest encryption enabled. See
   # https://metabase.com/docs/latest/operations-guide/encrypting-database-details-at-rest.html for an explanation of
@@ -192,7 +185,7 @@ executors:
     working_directory: /home/circleci/metabase/metabase/
     docker:
       - image: circleci/clojure:lein-2.9.5-node-browsers
-      - image: paoliniluis/test:mysql-8
+      - image: metabase/qa-databases:mysql-8
 
 ########################################################################################################################
 #                                             MAP FRAGMENTS AND CACHE KEYS                                             #
