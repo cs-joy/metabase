@@ -16,13 +16,13 @@ executors:
   clojure:
     working_directory: /home/circleci/metabase/metabase/
     docker:
-      - image: metabase/ci:metabase-ci-light
+      - image: paoliniluis/test:metabase-ci-light-alpine
   
   # CircleCI clojure base (Lein 2.9.5) + Node + Clojure CLI
   clojure-and-node:
     working_directory: /home/circleci/metabase/metabase/
     docker:
-      - image: metabase/ci:metabase-ci-node
+      - image: paoliniluis/test:metabase-ci-node-alpine
 
   # CircleCI base (Lein 2.9.5) + Node + Headless browsers + Clojure CLI
   clojure-and-node-and-browsers:
