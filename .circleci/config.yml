@@ -5,19 +5,6 @@ version: 2.1
 ########################################################################################################################
 
 executors:
-  # Basic executor with git and bash and not much else.
-  basic:
-    working_directory: /home/circleci/metabase/metabase/
-    docker:
-      # CircleCI base image
-      - image: cimg/base:2021.03
-  
-  # CircleCI clojure base (Lein 2.9.5) + Clojure CLI
-  clojure:
-    working_directory: /home/circleci/metabase/metabase/
-    docker:
-      - image: paoliniluis/test:metabase-ci-light-alpine
-  
   # CircleCI clojure base (Lein 2.9.5) + Node + Clojure CLI
   clojure-and-node:
     working_directory: /home/circleci/metabase/metabase/
@@ -479,7 +466,7 @@ jobs:
 ########################################################################################################################
 
   checkout:
-    executor: basic
+    executor: clojure-and-node
     steps:
       - checkout
       # .BACKEND-CHECKSUMS is every Clojure source file as well as dependency files like deps.edn and plugin manifests
@@ -520,7 +507,7 @@ jobs:
 
   check-migrations:
     executor:
-      clojure
+      clojure-and-node
     steps:
       - attach-workspace
       - create-checksum-file:
@@ -543,7 +530,7 @@ jobs:
 ########################################################################################################################
 
   be-deps:
-    executor: clojure
+    executor: clojure-and-node
     parameters:
       <<: *Params
     steps:
@@ -565,7 +552,7 @@ jobs:
     parameters:
       e:
         type: executor
-        default: clojure
+        default: clojure-and-node
       before-steps:
         type: steps
         default: []
@@ -602,7 +589,7 @@ jobs:
                 edition: << parameters.edition >>
 
   be-linter-reflection-warnings:
-    executor: clojure
+    executor: clojure-and-node
     steps:
       - attach-workspace
       - run-on-change:
@@ -618,7 +605,7 @@ jobs:
     parameters:
       e:
         type: executor
-        default: clojure
+        default: clojure-and-node
       driver:
         type: string
       timeout:
@@ -655,7 +642,7 @@ jobs:
                 path: /home/circleci/metabase/metabase/target/junit
 
   test-build-scripts:
-    executor: clojure
+    executor: clojure-and-node
     steps:
       - attach-workspace
       - run-on-change:
@@ -739,7 +726,7 @@ jobs:
   # Unlike the other build-uberjar steps, this step should be run once overall and the results can be shared between
   # OSS and EE uberjars.
   build-uberjar-drivers:
-    executor: clojure
+    executor: clojure-and-node
     parameters:
       <<: *Params
     steps:
@@ -814,7 +801,7 @@ jobs:
   build-uberjar:
     parameters:
       <<: *Params
-    executor: clojure
+    executor: clojure-and-node
     steps:
       - attach-workspace
       - run-on-change:
@@ -931,7 +918,7 @@ jobs:
 ########################################################################################################################
 
   deploy-master:
-    executor: clojure
+    executor: clojure-and-node
     steps:
       - attach-workspace
       - run: ./bin/deploy-webhook $DEPLOY_WEBHOOK
