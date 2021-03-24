@@ -28,7 +28,7 @@ executors:
   clojure-and-node-and-browsers:
     working_directory: /home/circleci/metabase/metabase/
     docker:
-      - image: metabase/ci:metabase-ci-full
+      - image: paoliniluis/test:metabase-ci-full
 
   # Java 11 tests also test Metabase with the at-rest encryption enabled. See
   # https://metabase.com/docs/latest/operations-guide/encrypting-database-details-at-rest.html for an explanation of
